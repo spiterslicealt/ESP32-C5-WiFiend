@@ -1,3 +1,6 @@
+#include "ssd1306.h"
+#include "battery.h"
+#include "encoder.h"
 #include <stdio.h>
 #include "nvs_flash.h"
 #include "esp_system.h"
