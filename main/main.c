@@ -131,7 +131,6 @@ static void detail_encoder_handler(encoder_event_t event) {
         neopixel_set_color(COLOR_GREEN);
         menu_render();
     } else {
-        encoder_set_callback(scanner_encoder_handler);
         wifi_scan_render();
     }
 }
@@ -535,22 +534,13 @@ static void webui_encoder_handler(encoder_event_t event) {
 static void menu_webui(void) {
     webui_active = true;
     neopixel_set_color(COLOR_CYAN);
-    encoder_set_callback(webui_encoder_handler);
     wifi_webui_set_op_callbacks(on_webui_op_start, on_webui_op_stop);
     wifi_webui_enter();
     wifi_webui_render();
 }
 
 // Hold BOOT 2s anywhere (except already in WebUI) → clean reboot into WebUI.
-static void boot_button_task(void *arg) {
-    (void)arg;
-    gpio_config_t io = {
-        .pin_bit_mask = 1ULL << PIN_BOOT_BUTTON,
-        .mode         = GPIO_MODE_INPUT,
-        .pull_up_en   = GPIO_PULLUP_ENABLE,
-        .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type    = GPIO_INTR_DISABLE,
-    };
+;
     gpio_config(&io);
 
     ESP_LOGI(TAG, "BOOT button GPIO%d — hold %ds for Remote WebUI",
@@ -1210,7 +1200,6 @@ void app_main(void) {
         if (ble_hid_active)    { ble_hid_tick();    neopixel_pulse(COLOR_CYAN); }
         if (ble_advlog_active) { ble_advlog_tick(); neopixel_pulse(COLOR_BLUE); }
         if (ble_nus_active)    { ble_nus_tick();    neopixel_pulse(COLOR_CYAN); }
-        battery_tick();
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
