@@ -6,14 +6,11 @@
 #define BOARD_NAME "NM-CYD-C5"
 
 /*
- * Screen removed.
+ * Headless NM-CYD-C5.
+ * Physical display/touch/encoder are not used.
  * WebUI is the primary interface.
- *
- * NM-CYD-C5:
- * WS2812 RGB LED = GPIO27
  */
 
 #define PIN_NEOPIXEL GPIO_NUM_27
-#define PIN_BOOT_BUTTON GPIO_NUM_NC
 
 #endif
