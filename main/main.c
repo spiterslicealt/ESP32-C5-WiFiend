@@ -8,7 +8,7 @@
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "board/xiao_esp32c5.h"
+#include "board/nm_cyd_c5.h"
 #include "boot_mode.h"
 #include "ota_github.h"
 
