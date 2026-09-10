@@ -18,7 +18,7 @@
 #include "ble_core.h"
 #include "ble_scan.h"
 #include "ble_ident.h"
-#include "esp_wifi.h"
+#include "esp_.h"
 #include "esp_ota_ops.h"
 #include "esp_http_server.h"
 #include "esp_log.h"
@@ -118,13 +118,13 @@ static void emit_log(const char *fmt, ...) {
     cJSON_Delete(root);
 }
 
-// ---------- WiFi event handlers ----------
+// ----------  event handlers ----------
 
 static void on_ap_connect(void *arg, esp_event_base_t base, int32_t id, void *data) {
     if (s_clients < 255) s_clients++;
     s_refresh = true;
     ESP_LOGI(TAG, "Client connected (%u total)", (unsigned)s_clients);
-    broadcast_text("{\"event\":\"wifi_ready\"}");
+    broadcast_text("{\"event\":\"_ready\"}");
 }
 
 static void on_ap_disconnect(void *arg, esp_event_base_t base, int32_t id, void *data) {
@@ -132,16 +132,16 @@ static void on_ap_disconnect(void *arg, esp_event_base_t base, int32_t id, void 
     s_refresh = true;
     ESP_LOGI(TAG, "Client disconnected (%u total)", (unsigned)s_clients);
     // Remove the fd from registry; client will WS-reconnect
-    wifi_event_ap_stadisconnected_t *ev = data;
+    _event_ap_stadisconnected_t *ev = data;
     (void)ev;
 }
 
 // ---------- AP/HTTP setup internal helper ----------
 
 static void register_ws_event_handlers(void) {
-    esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_AP_STACONNECTED,
+    esp_event_handler_register(_EVENT, _EVENT_AP_STACONNECTED,
                                on_ap_connect, NULL);
-    esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_AP_STADISCONNECTED,
+    esp_event_handler_register(_EVENT, _EVENT_AP_STADISCONNECTED,
                                on_ap_disconnect, NULL);
 }
 
@@ -1070,21 +1070,16 @@ static void register_uri_handlers(void) {
 
 // ---------- OLED render ----------
 
-void wifi_webui_render(void) {
-    char hdr_r[12];
-    snprintf(hdr_r, sizeof(hdr_r), "%u client%s",
-             (unsigned)s_clients, s_clients == 1 ? "" : "s");
-
-    ssd1306_clear_buffer();
-    ssd1306_draw_header("Remote WebUI", hdr_r);
-    ssd1306_draw_string(0, 2, "WiFiend-Remote");
-    ssd1306_draw_string(0, 3, "192.168.4.1");
-
-    char line[17];
-    if (!s_httpd) {
-        ssd1306_draw_string(0, 4, "HTTP FAIL");
-        ssd1306_draw_string(0, 5, "Check serial log");
-    } else if (s_restarting) {
+void wifi_webui_render(void)
+{
+    /*
+     * NM-CYD-C5 is running headless.
+     * The phone/browser is the display.
+     *
+     * The WebUI HTTP server and WebSocket handling
+     * run independently of the physical display.
+     */
+} else if (s_restarting) {
         ssd1306_draw_string(0, 4, "WiFi restart..");
     } else if (s_clients == 0) {
         ssd1306_draw_string(0, 4, "Join AP, then");
