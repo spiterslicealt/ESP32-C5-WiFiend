@@ -14,5 +14,6 @@
  */
 
 #define PIN_NEOPIXEL GPIO_NUM_27
+#define PIN_BOOT_BUTTON GPIO_NUM_NC
 
 #endif
