@@ -1073,11 +1073,8 @@ static void register_uri_handlers(void) {
 void wifi_webui_render(void)
 {
     /*
-     * NM-CYD-C5 is running headless.
+     * Headless NM-CYD-C5.
      * The phone/browser is the display.
-     *
-     * The WebUI HTTP server and WebSocket handling
-     * run independently of the physical display.
      */
 } else if (s_restarting) {
         ssd1306_draw_string(0, 4, "WiFi restart..");
