@@ -18,7 +18,6 @@
 #include "ble_core.h"
 #include "ble_scan.h"
 #include "ble_ident.h"
-#include "esp_.h"
 #include "esp_ota_ops.h"
 #include "esp_http_server.h"
 #include "esp_log.h"
