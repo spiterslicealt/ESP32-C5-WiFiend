@@ -539,35 +539,6 @@ static void menu_webui(void) {
     wifi_webui_render();
 }
 
-// Hold BOOT 2s anywhere (except already in WebUI) → clean reboot into WebUI.
-;
-    gpio_config(&io);
-
-    ESP_LOGI(TAG, "BOOT button GPIO%d — hold %ds for Remote WebUI",
-             (int)PIN_BOOT_BUTTON, BOOT_HOLD_MS / 1000);
-
-    uint32_t held_ms = 0;
-    while (1) {
-        int level = gpio_get_level(PIN_BOOT_BUTTON);
-        if (level == 0) {   // active LOW = pressed
-            held_ms += BOOT_POLL_MS;
-            if (held_ms >= BOOT_HOLD_MS) {
-                if (webui_active) {
-                    // Already serving — ignore until release (no reboot loop).
-                    while (gpio_get_level(PIN_BOOT_BUTTON) == 0)
-                        vTaskDelay(pdMS_TO_TICKS(BOOT_POLL_MS));
-                    held_ms = 0;
-                    continue;
-                }
-                ESP_LOGW(TAG, "BOOT held %lums → Remote WebUI",
-                         (unsigned long)held_ms);
-                boot_mode_reboot(BOOT_DEST_WEBUI);
-            }
-        } else {
-            held_ms = 0;
-        }
-        vTaskDelay(pdMS_TO_TICKS(BOOT_POLL_MS));
-    }
 }
 
 static void game_encoder_handler(encoder_event_t event) {
