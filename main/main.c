@@ -11,11 +11,7 @@
 #include "board/nm_cyd_c5.h"
 #include "boot_mode.h"
 #include "ota_github.h"
-
-#include "ssd1306.h"
-#include "encoder.h"
 #include "neopixel.h"
-#include "battery.h"
 #include "menu.h"
 #include "wifi_scan.h"
 #include "wifi_ap.h"
@@ -1137,13 +1133,7 @@ void app_main(void) {
     esp_netif_create_default_wifi_sta();
     esp_netif_create_default_wifi_ap();
 
-    ssd1306_init();
     neopixel_init();
-    battery_init();
-    encoder_init();
-
-    display_boot_splash();
-
     neopixel_set_color(COLOR_GREEN);
 
     esp_vfs_littlefs_conf_t lfs_conf = {
@@ -1174,10 +1164,8 @@ void app_main(void) {
     cli_init();
 
     menu_init(main_menu, sizeof(main_menu) / sizeof(main_menu[0]));
-    encoder_set_callback(encoder_event_handler);
 
-    uint32_t boot_dest = boot_mode_consume();
-    xTaskCreate(boot_button_task, "boot_btn", 2048, NULL, 3, NULL);
+ uint32_t boot_dest = BOOT_DEST_WEBUI;
 
     if (boot_dest == BOOT_DEST_OTA) {
         ESP_LOGI(TAG, "BOOT request: GitHub OTA update");
