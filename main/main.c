@@ -1096,10 +1096,6 @@ static void encoder_event_handler(encoder_event_t event) {
     }
 }
 
-static void display_boot_splash(void) {
-    ssd1306_draw_bitmap_fullscreen(boot_bitmap);
-    vTaskDelay(pdMS_TO_TICKS(2000));
-}
 
 static void ota_github_task(void *arg) {
     (void)arg;
@@ -1114,7 +1110,6 @@ void app_main(void) {
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
-    }
     ESP_ERROR_CHECK(ret);
 
     ESP_ERROR_CHECK(esp_netif_init());
