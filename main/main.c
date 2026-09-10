@@ -1178,7 +1178,6 @@ void app_main(void) {
         if (pmkid_active) wifi_pmkid_render();
         if (handshake_active) wifi_handshake_render();
         if (captures_active && wifi_captures_needs_refresh()) wifi_captures_render();
-        if (webui_active) wifi_webui_render();
         if (sniffer_active) { wifi_sniff_render(); neopixel_pulse(COLOR_MAGENTA); }
         if (monitor_active) { wifi_monitor_render(); neopixel_pulse(COLOR_CYAN); }
         if (fs_browser_active && fs_browser_needs_refresh()) fs_browser_render();
