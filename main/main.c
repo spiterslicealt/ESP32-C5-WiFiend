@@ -539,7 +539,6 @@ static void menu_webui(void) {
     wifi_webui_render();
 }
 
-}
 
 static void game_encoder_handler(encoder_event_t event) {
     if (event == ENCODER_LONG_PRESS) {
